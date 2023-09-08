@@ -5,7 +5,3 @@ def solution(a, b):
     targetMonths = dates[0:a-1]
     totalDays = reduce(lambda acc, cur: acc+cur,targetMonths, b);
     return DAYS[totalDays%7]
-    
-    
-    answer = ''
-    return answer
