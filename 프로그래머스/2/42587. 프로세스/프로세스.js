@@ -4,7 +4,7 @@ function solution(priorities, location) {
     const checkedPriorities = [];
     let targetPriorities = [...prioritiesCouple];
     
-    while (prioritiesTable.size >= 1) {
+    while (targetPriorities.length >= 1) {
         const restPriorities = Array.from(prioritiesTable.values());
         let maxPriorities = Math.max(...restPriorities);
         const targetPriority = targetPriorities[0];
