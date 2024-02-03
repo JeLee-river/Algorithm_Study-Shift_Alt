@@ -1,15 +1,15 @@
 function solution(number, k) {
-    const initialLength = number.length;
     const answer = [];
-    let removed = 0;
-    for(let i = 0; i <= number.length-1; i+=1){
-        while(answer.length > 0 && answer[answer.length-1] < number[i] && removed !== k){
+    
+    for (let i = 0; i < number.length; i++) {
+        while (k > 0 && answer.length > 0 && answer[answer.length - 1] < number[i]) {
             answer.pop();
-            removed += 1;
+            k -= 1;
         }
-        if(answer.length !== initialLength-k) {
-            answer.push(number[i]);
-        }
+        answer.push(number[i]);
     }
+
+    answer.splice(answer.length - k, k);
+
     return answer.join('');
 }
