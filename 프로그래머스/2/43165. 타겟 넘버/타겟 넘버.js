@@ -6,7 +6,7 @@ function solution(numbers, target) {
         if(currentValue === target){
             answer += 1;
         } else {
-            if(currentValue < target || currentIndex > numbers.length-1){
+            if(currentValue < target){
                 return;
             }
             
