@@ -3,11 +3,11 @@ const parseInput = (inputArray) => {
 	return accountArray;
 }
 
-const isSaving = (N, accountArray) => {
+const isSaving = (accountArray) => {
 	let asset = 0;
 
-	for (let i = 0; i <= accountArray.length-1; i+=1){
-		const [accountName, money] = accountArray[i];
+	for (const account of accountArray){
+		const [accountName, money] = account;
 		if(accountName === 'in'){
 			asset += Number(money);
 		} else {
@@ -41,7 +41,7 @@ const readline = require('readline');
 	}
 
 	const accountArray = parseInput(inputArray);
-	console.log(isSaving(N, accountArray));
+	console.log(isSaving(accountArray));
 	
 	process.exit();
 })();
