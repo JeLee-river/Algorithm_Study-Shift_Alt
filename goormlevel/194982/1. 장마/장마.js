@@ -43,8 +43,8 @@ const readline = require('readline');
 	for await (const line of rl) {
 		if(!N && !M){
 			const splitFirstLine = line.split(' ');
-			N = splitFirstLine[0];
-			M = splitFirstLine[1];
+			N = Number(splitFirstLine[0]);
+			M = Number(splitFirstLine[1]);
 			continue;
 		}
 		
