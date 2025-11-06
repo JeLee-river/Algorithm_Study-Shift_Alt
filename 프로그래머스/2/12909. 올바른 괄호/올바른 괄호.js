@@ -1,14 +1,20 @@
 function solution(s){
-    const checked = [];
+    const stringArray = s.split('');
+    const closed = [']', '}', ')'];
+    const opened = ['[', '{', '('];
+    const pair = new Map([['[', ']'], ['{', '}'], ['(', ')']]);
+    const history = [];
     
-    for (const bracket of s) {
-        if (bracket === '(') {
-            checked.push(bracket);
-        } else if (checked.length === 0) {
-            return false;
-        } else {
-            checked.pop();
+    while(stringArray.length > 0){
+        const target = stringArray.pop();
+        if(closed.includes(target)){
+            history.push(target);
+            continue;
         }
+
+        const lastBracket = history.pop();
+        if(pair.get(target) !== lastBracket) return false;
     }
-    return checked.length === 0;
+    
+    return history.length > 0 ? false : true;
 }
