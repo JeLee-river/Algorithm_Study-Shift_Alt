@@ -7,7 +7,7 @@ function solution(clothes) {
     }
     const totalClothesChoices = Array.from(clothesClassHash.values());
     const totalChoices = totalClothesChoices.reduce((acc, cur) => {
-        return acc*(cur+1);
+        return acc * (cur + 1);
     },1);
     return totalChoices - 1;
 }
