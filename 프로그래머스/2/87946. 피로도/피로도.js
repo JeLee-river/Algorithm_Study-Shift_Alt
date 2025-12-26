@@ -1,25 +1,21 @@
 function solution(k, dungeons) {
-    const answer = [];
+    const visited = new Set();
+    let answer = 0;
     
-    const play = (life, visited, cleared) => {
-        if(visited.size === dungeons.length){
-            answer.push(cleared);
-            return;
-        }
+    const play = (fatigue, clearCount) => {   
+        answer = Math.max(clearCount, answer);
         
-        for (let i = 0; i <= dungeons.length -1; i+=1){
-            const newVisited = new Set(visited);
-            if(!newVisited.has(i)){
-                newVisited.add(i);
-                if(life >= dungeons[i][0]){
-                    play(life - dungeons[i][1], newVisited, cleared+1);
-                } else {
-                    play(life, newVisited, cleared);
-                }
-            }
+        for (let i = 0; i <= dungeons.length - 1; i += 1) {
+            if(visited.has(i)) continue;
+            
+            const [needs, resume] = dungeons[i];
+            if(needs > fatigue) continue;
+            visited.add(i);
+            play(fatigue - resume, clearCount + 1);
+            visited.delete(i);
         }
     }
     
-    play(k, new Set(), 0);
-    return Math.max(...answer);
+    play(k, 0);
+    return answer;
 }
