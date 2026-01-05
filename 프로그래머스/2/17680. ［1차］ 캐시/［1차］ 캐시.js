@@ -1,18 +1,26 @@
 function solution(cacheSize, cities) {
-    const cacheHash = new Map();
+    const cacheTable = new Map();
     
-    return cities.reduce((acc, cur, idx) => {
-        const newCity = cur.toLowerCase();
-        if(cacheHash.has(newCity)) {
-            cacheHash.delete(newCity);
-            cacheHash.set(newCity,idx);
-            return acc + 1;
+    let time = 0;
+    for (const cityString of cities) {
+        const city = cityString.toUpperCase();
+        if(!cacheTable.has(city)) {
+            if(cacheTable.size === cacheSize) {
+                const cacheTableKeys = Array.from(cacheTable.keys());
+                const oldest = cacheTableKeys[0];
+                cacheTable.delete(oldest);
+            }
+            if(cacheTable.size < cacheSize) {
+                cacheTable.set(city, cacheTable.size);
+            }
+            
+            time += 5;
+        } else {
+            cacheTable.delete(city);
+            cacheTable.set(city, cacheTable.size);
+            time += 1;
         }
-        cacheHash.set(newCity,idx);
-        if(cacheHash.size > cacheSize) {
-            const cacheList = Array.from(cacheHash.keys());
-            cacheHash.delete(cacheList[0]);
-        }
-        return acc + 5;
-    },0)
+    }
+    
+    return time;
 }
