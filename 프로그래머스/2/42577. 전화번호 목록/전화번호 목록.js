@@ -1,16 +1,13 @@
 function solution(phone_book) {
-    const numberHash = new Map()
-    phone_book.forEach((number) => {
-        numberHash.set(number, number);
-    })
+    phone_book.sort((a,b) =>{
+        return a.localeCompare(b);
+    });
     
-    for (let number of phone_book){
-        for(let i = 1; i <= number.length-1; i++){
-            const slicedNumber = number.slice(0,i)
-            if(numberHash.has(slicedNumber)){
-                return false;
-            }
+    for (let targetIndex = 0; targetIndex < phone_book.length - 1; targetIndex += 1) {
+        if((phone_book[targetIndex + 1]).startsWith(phone_book[targetIndex])) {
+            return false;
         }
     }
+    
     return true;
 }
