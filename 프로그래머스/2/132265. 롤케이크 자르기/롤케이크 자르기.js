@@ -1,23 +1,27 @@
 function solution(topping) {
-    const toppingMenu = new Map();
+    const toppingMap = new Map();
+    
+    topping.forEach((item) => {
+        toppingMap.set(item, (toppingMap.get(item) ?? 0) + 1);
+    });
+    
     let answer = 0;
-    
-    topping.forEach((menu) => {
-        toppingMenu.set(menu, (toppingMenu.get(menu) ?? 0) + 1);
-    })
-    
-    const chulsuTopping = new Map();
-    for (let i = 0; i <= topping.length - 1; i++) {
-        chulsuTopping.set(topping[i], (chulsuTopping.get(topping[i]) ?? 0) + 1);
-        toppingMenu.set(topping[i], toppingMenu.get(topping[i]) - 1);
+    const currentTopping = new Set();
+    for (const item of topping) {
+        currentTopping.add(item);
         
-        if(toppingMenu.get(topping[i]) === 0){
-            toppingMenu.delete(topping[i]);
+        if(toppingMap.has(item)) {
+            toppingMap.set(item, toppingMap.get(item) - 1);
         }
         
-        if(chulsuTopping.size === toppingMenu.size){
+        if(toppingMap.get(item) === 0) {
+            toppingMap.delete(item);
+        }
+        
+        if(toppingMap.size === currentTopping.size) {
             answer += 1;
         }
     }
+    
     return answer;
 }
