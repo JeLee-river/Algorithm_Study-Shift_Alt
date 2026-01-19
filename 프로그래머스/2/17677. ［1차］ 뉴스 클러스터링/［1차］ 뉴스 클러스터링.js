@@ -1,41 +1,43 @@
 function solution(str1, str2) {
-    const targetStr1 = str1.toLowerCase();
-    const targetStr2 = str2.toLowerCase();
+    const strs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     
-    function checkIsAlphabet(str) {
-        return (('a' <= str) && ('z' >= str));
-    }
-    
-    function elementCountHash(str) {
-        const result = new Map();
-        for (let i = 0; i <= str.length-2; i++) {
-            if(checkIsAlphabet(str[i]) && checkIsAlphabet(str[i+1])) {
-                const targetString = str.slice(i, i+2);
-                result.set(targetString, (result.get(targetString)??0) + 1);
+    const getSet = (str) => {
+        const setArr = [];
+        for (let i = 0; i <= str.length - 2; i += 1) {
+            if(strs.includes(str[i]) && strs.includes(str[i+1])) {
+                setArr.push(`${str[i]}${str[i+1]}`);
             }
         }
+        
+        return setArr;
+    }
+    
+    const getMap = (arr) => {
+        const result = new Map();
+        arr.forEach((str) => {
+            result.set(str, (result.get(str) ?? 0)+ 1);
+        });
+        
         return result;
     }
     
-    const counter1 = elementCountHash(targetStr1);
-    const counter2 = elementCountHash(targetStr2);
-    let unionCounter = 0;
-    let intersectionCounter = 0;
+    const convertedStr1 = getSet(str1.toUpperCase());
+    const convertedStr2 = getSet(str2.toUpperCase());
+    const str1Map = getMap(convertedStr1);
+    const str2Map = getMap(convertedStr2);
     
-    for (let [str, count] of counter2) {
-        const strCountInCounter1 = counter1.get(str);
-        if(strCountInCounter1) {
-            intersectionCounter += Math.min(strCountInCounter1, count);
-            counter1.delete(str);
-        }
-        unionCounter += Math.max(strCountInCounter1??0, count);
+    const keys = new Set([...str1Map.keys(), ...str2Map.keys()]);
+
+    let intersectionCount = 0;
+    let unionCount = 0;
+
+    for (const key of keys) {
+        const str1Count = str1Map.get(key) ?? 0;
+        const str2Count = str2Map.get(key) ?? 0;
+        intersectionCount += Math.min(str1Count, str2Count);
+        unionCount += Math.max(str1Count, str2Count);
     }
-    
-    const counter1TotalCount = Array.from(counter1.values()).reduce((acc, cur) => {
-        return acc + cur;
-    },0);
-    const denominator = unionCounter + counter1TotalCount;
-    const numerator = intersectionCounter;
-    if (numerator === 0 && denominator === 0) return 1*65536;
-    return Math.floor((numerator/denominator)*65536);
+
+    if (unionCount === 0) return 65536;
+    return Math.floor((intersectionCount / unionCount) * 65536);
 }
