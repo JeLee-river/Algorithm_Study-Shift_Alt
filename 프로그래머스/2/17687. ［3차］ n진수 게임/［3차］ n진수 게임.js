@@ -1,21 +1,16 @@
 function solution(n, t, m, p) {
-    let answers = '';
-    let targetNumber = 0;
+    const lastIndex = m * (t - 1) + p;
+    const play = [];
     
-    while((answers.length / m) <= t){
-        const convertedNumber = targetNumber.toString(n);
-        answers += convertedNumber.toUpperCase();
-        targetNumber += 1;
-    }
-    
-    const splitedAnswers = answers.split('');
-    const playerAnswer = splitedAnswers.filter((num,idx) => {
-        if(m === p){
-            return (idx+1) % m === 0
-        }
+    let number = 0;
+    while(play.length < lastIndex) {
+        const baseNumber = number.toString(n).toUpperCase();
+        for (let i = 0; i < baseNumber.length && play.length < lastIndex; i += 1) {
+            play.push(baseNumber[i]);
+        }   
         
-        return (idx+1) % m === p
-    });
-    
-    return playerAnswer.slice(0,t).join('');
+        number += 1;
+    }
+
+    return play.filter((num, index) => index % m === (p - 1)).join('');
 }
