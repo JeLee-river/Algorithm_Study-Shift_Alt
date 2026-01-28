@@ -1,24 +1,36 @@
 function solution(land) {
-    const dp = Array.from({length: land.length}, () => Array.from({length: 4}, () => 0));
-    land.forEach((stage, stageIndex) => {
-        if(stageIndex === 0){
-            dp[0] = stage;
-        } else {
-            stage.forEach((score, index) => {
-                const totalScore = [];
+  const rowCount = land.length;
+  const colCount = land[0].length;
 
-                for (let i = 0; i <= 3; i+=1){
-                    if(i !== index){
-                        const scoreSum = dp[stageIndex-1][i] + score;
-                        totalScore.push(scoreSum);
-                    }
-                }
+  const dp = Array.from({ length: rowCount }, () => Array.from({ length: colCount }, () => 0));
 
-                const biggest = Math.max(...totalScore);
-                dp[stageIndex][index] = biggest;
-            });  
-        }
-    });
-    
-    return Math.max(...dp.pop());
+  for (let col = 0; col < colCount; col+=1) {
+      dp[0][col] = land[0][col];
+  }
+
+  for (let row = 1; row < rowCount; row+=1) {
+    const prevRowDp = dp[row - 1];
+
+    let bestScore = -Infinity;
+    let secondBestScore = -Infinity;
+    let bestCol = -1;
+
+    for (let col = 0; col < colCount; col += 1) {
+      const score = prevRowDp[col];
+      if (score > bestScore) {
+        secondBestScore = bestScore;
+        bestScore = score;
+        bestCol = col;
+      } else if (score > secondBestScore) {
+        secondBestScore = score;
+      }
+    }
+
+    for (let col = 0; col < colCount; col+=1) {
+      const add = (col === bestCol) ? secondBestScore : bestScore;
+      dp[row][col] = land[row][col] + add;
+    }
+  }
+
+  return Math.max(...dp[rowCount - 1]);
 }
