@@ -1,37 +1,24 @@
 function solution(order) {
-    const truck=[];
-    const newContainer = [];
-    const container = [];
-    const newOrder = [];
-    
-    for (let i = order.length; i >= 1; i--){
-        container.push(i);
-        newOrder.push(order[i-1]);
-    }
-    
-    while(newOrder.length > 0){
-        const target = newOrder.pop();
-        const package = container.pop();
-        const storedPackage = newContainer.pop();
-        
-        if(target === package){
-            truck.push(package);
-            newContainer.push(storedPackage);
-            continue;
-        } 
-        
-        if(target === storedPackage){
-            truck.push(storedPackage);
-            container.push(package);
-            continue;
+    const store = [];
+    const package = Array.from({length: order.length}, (_, index) => order.length - index);
+    let answer = 0;
+    for (let i = 0; i <= order.length - 1; i += 1) {
+        const target = order[i];
+        while (package[package.length - 1] < target) {
+            const last = package.pop();
+            store.push(last);
         }
         
-        if(container.length === 0){
-            break;
+        if(package[package.length - 1] === target) {
+            package.pop();
+            answer += 1;
+        } else if(store[store.length - 1] === target) {
+            store.pop();
+            answer += 1;
+        } else {
+            return answer;
         }
-        newOrder.push(target);
-        newContainer.push(storedPackage);
-        newContainer.push(package);
     }
-    return truck.length;
+    
+    return answer;
 }
