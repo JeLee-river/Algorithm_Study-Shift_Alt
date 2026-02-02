@@ -1,33 +1,33 @@
 function solution(skill, skill_trees) {
-    const skillImportance = new Map();
-    skill.split('').forEach((eachSkill, index) => {
-        skillImportance.set(eachSkill, index);
-    });
-
+    const skillMap = new Map();
+    for(let i = 0; i < skill.length; i += 1) {
+        skillMap.set(skill[i], i);
+    }
+    
     let answer = 0;
-    while(skill_trees.length > 0){
-        const importanceList = [];
-        const target = skill_trees.pop();
-        target.split('').forEach((skills) => {
-            const importance = skillImportance.get(skills);
-            if(importance !== undefined){
-                importanceList.push(importance);
-            }
-        });
+    for(const skillTree of skill_trees) {
+        const skillHistory = [];
+        let valid = true;
 
-        let isPossible = true;
-        if(importanceList.length > 0){
-          for (let i = 0; i <= importanceList.length - 1; i++){
-            if(importanceList[i] !== i){
-                isPossible = false;
+        for(let i = 0; i < skillTree.length; i += 1) {
+            const target = skillTree[i];
+            if (!skillMap.has(target)){
+                continue;
+            }
+
+            const index = skillMap.get(target);
+            if(index !== skillHistory.length) {
+                valid = false;
                 break;
             }
-          }
+
+            skillHistory.push(index);
         }
-        if(isPossible){
+
+        if(valid) {
             answer += 1;
         }
     }
 
-    return answer;
+  return answer;
 }
