@@ -1,11 +1,17 @@
 function solution(n) {
-    const arrangement = Array.from({length: n}, () => 0);
-    arrangement[0] = 1;
-    arrangement[1] = 2;
+    const arr = Array.from({length: n + 1}, () => 0);
+    arr[1] = 1;
+    arr[2] = 2;
+    if(n === 1) return arr[1];
+    if(n === 2) return arr[2];
     
-    for (let i = 2; i <= n-1; i++){
-        arrangement[i] = (arrangement[i-1] + arrangement[i-2])%1000000007;
+    let prev1 = arr[1];
+    let prev2 = arr[2];
+    for (let i = 3; i <= arr.length - 1; i += 1) {
+        arr[i] = (prev1 + prev2) % 1000000007;
+        prev1 = prev2 % 1000000007;
+        prev2 = arr[i] % 1000000007;
     }
     
-    return arrangement[n-1]
+    return prev2;
 }
