@@ -1,20 +1,23 @@
-function solution(m, n, puddles) { 
-    const dp = Array.from({length: n}, () => Array.from({length: m}, () => null));
-    dp[0][0] = 1;
-
-    puddles.forEach(([column, row]) => {
-        dp[row-1][column-1] = 0;
-    })
+function solution(m, n, puddles) {
+    const dp = Array.from({length: n + 1}, () => Array.from({length: m + 1}, () => 0));
+    dp[1][1] = 1;
     
-    for(let row = 0; row <= n-1; row += 1){
-        for(let column = 0; column <= m-1; column += 1){
-            if(dp[row][column] === null){
-                const top = row > 0 ? dp[row-1][column] : 0;
-                const left = column > 0 ? dp[row][column-1] : 0;
-                dp[row][column] = (top + left) % 1000000007;
+    for (const [column, row] of puddles) {
+        dp[row][column] = -1;
+    }
+    
+    for (let row = 1; row <= n; row += 1) {
+        for (let column = 1; column <= m; column += 1) {
+            if(dp[row][column] === -1) {
+                dp[row][column] = 0;
+                continue;
             }
+            
+            if(row === 1 && column === 1) continue;
+            
+            dp[row][column] = (dp[row - 1][column] + dp[row][column - 1]) % 1000000007;
         }
     }
     
-    return dp[n-1][m-1];
+    return dp[n][m] % 1000000007
 }
